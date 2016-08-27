@@ -11,7 +11,12 @@ initial_server_setup() {
 
 
   # Add the main user
-  adduser $USERNAME
+  adduser \
+    --create-home \
+    --password "passpass_`echo $USERNAME | rev`_ssapssap" \
+    --shell /bin/bash \
+    --user-group
+    $USERNAME
   usermod -aG sudo $USERNAME
 
 
