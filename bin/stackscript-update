@@ -5,7 +5,7 @@ DISTRIBUTION="Ubuntu 16.04 LTS"
 CODE_FILE=./lib/initial_server_setup.sh
 if [ $1 ]; then
   REVISION_NOTE=$1
-elif
+else
   REVISION_NOTE="Revised"
 fi
 
