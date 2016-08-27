@@ -1,0 +1,14 @@
+#!/bin/bash
+
+LABEL=hbj_initial_setup
+DISTRIBUTION="Ubuntu 16.04 LTS"
+CODE_FILE=./lib/initial_server_setup.sh
+DESCRIPTION="Initial setup (as per http://goo.gl/0GLSrd)"
+
+linode stackscript create \
+  --label $LABEL \
+  --distribution $DISTRIBUTION \
+  --codefile $CODE_FILE \
+  --ispublic false \
+  --description "$DESCRIPTION" \
+  --revnote "Initial revision"

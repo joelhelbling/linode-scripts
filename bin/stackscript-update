@@ -1,0 +1,19 @@
+#!/bin/bash
+
+LABEL=hbj_initial_setup
+DISTRIBUTION="Ubuntu 16.04 LTS"
+CODE_FILE=./lib/initial_server_setup.sh
+if [ $1 ]; then
+  REVISION_NOTE=$1
+elif
+  REVISION_NOTE="Revised"
+fi
+
+linode stackscript update \
+  --label $LABEL \
+  --distribution $DISTRIBUTION \
+  --codefile $CODE_FILE \
+  --ispublic false \
+  --description "$DESCRIPTION" \
+  --revnote "$REVISION_NOTE"
+
