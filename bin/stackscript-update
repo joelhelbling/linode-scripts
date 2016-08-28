@@ -6,15 +6,15 @@ CODE_FILE=./lib/initial_server_setup.sh
 DESCRIPTION="Initial setup (as per http://goo.gl/0GLSrd)"
 
 if [ "$1" == "" ]; then
-  REVISION_NOTE="Revised"
+  REVISION_NOTE="Revised and uploaded"
 else
   REVISION_NOTE=$1
 fi
 
 linode stackscript update \
   --label $LABEL \
-  --distribution $DISTRIBUTION \
-  --codefile $CODE_FILE \
+  --distribution "$DISTRIBUTION" \
+  --codefile "$CODE_FILE" \
   --ispublic false \
   --description "$DESCRIPTION" \
   --revnote "$REVISION_NOTE"
