@@ -9,7 +9,7 @@ initial_server_setup() {
   LOG=~/StackScript.log
   log() {
     echo "`date +'%Y/%m/%d %H:%M:%S.%N'` :: $1" >> $LOG
-  fi
+  }
   log "starting stackscript"
 
   apt-get update
