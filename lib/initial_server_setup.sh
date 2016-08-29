@@ -81,7 +81,7 @@ EOF
   if [ ! -z "$GIST_ID" ]; then
     GIST_URL="https://gist.githubusercontent.com/$GITHUB_USER/$GIST_ID/raw"
     log "gist url: $GIST_URL"
-    curl $GIST_URL | bash
+    curl -H "Cache-Control: no-cache" $GIST_URL | bash
   fi
 }
 
