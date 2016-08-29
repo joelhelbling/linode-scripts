@@ -1,5 +1,6 @@
 {
   "USERNAME": "<your desired username>",
   "GITHUB_USER": "<your github id>",
-  "TIMEZONE": ""
+  "TIMEZONE": "<your preferred timezone>",
+  "GIST_SCRIPT": "<gist to be run as a script (should belong to $GITHUB_USER)>"
 }

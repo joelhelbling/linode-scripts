@@ -10,14 +10,22 @@ DISTRIBUTION="Ubuntu 16.04 LTS"
 STACKSCRIPT_NAME="hbj_initial_setup"
 
 STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*/ {print $2}'`
-ROOT_PASSWORD="passpass_`echo $LABEL | rev`_ssapssap"
-JSON=`jq -c . udf.json`
+ROOT_PASSWORD=`openssl rand -base64 32`
+USER_PASSWORD=`openssl rand -base64 16`
+JSON=`jq -c "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" udf.json`
 
 echo running with json: $JSON
 
-linode rebuild \
-  --label "$LABEL" \
-  --distribution "$DISTRIBUTION" \
-  --password "$ROOT_PASSWORD" \
-  --stackscript "$STACKSCRIPT_ID" \
-  --stackscriptjson $JSON
+if [ -z "$DRY_RUN" ]; then
+  linode rebuild \
+    --label "$LABEL" \
+    --distribution "$DISTRIBUTION" \
+    --password "$ROOT_PASSWORD" \
+    --stackscript "$STACKSCRIPT_ID" \
+    --stackscriptjson $JSON
+fi
+
+cat <<EOF
+Root password: $ROOT_PASSWORD
+User password: $USER_PASSWORD
+EOF
