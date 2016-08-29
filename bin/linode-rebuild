@@ -13,12 +13,13 @@ LABEL=$1
 DISTRIBUTION="Ubuntu 16.04 LTS"
 STACKSCRIPT_NAME="hbj_initial_setup"
 
+IP_ADDRESS=`linode linode show robert-vpn | grep ips: | awk '/\s*/ {print $2}'`
 STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*/ {print $2}'`
 ROOT_PASSWORD=`generate_password`
 USER_PASSWORD=`generate_password`
 JSON=`jq -c "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" udf.json`
 
-echo running with json: $JSON
+echo "running on $LABEL ($IP_ADDRESS) with json: $JSON"
 
 if [ -z "$DRY_RUN" ]; then
   linode rebuild \
@@ -27,6 +28,11 @@ if [ -z "$DRY_RUN" ]; then
     --password "$ROOT_PASSWORD" \
     --stackscript "$STACKSCRIPT_ID" \
     --stackscriptjson $JSON
+
+  if [ ! -z "$IP_ADDRESS" ]; then
+    KNOWN_HOSTS=`grep -v $IP_ADDRESS .ssh/known_hosts`
+    echo $KNOWN_HOSTS > .ssh/known_hosts
+  fi
 fi
 
 cat <<EOF
