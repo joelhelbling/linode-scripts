@@ -5,13 +5,17 @@ if [ "$1" == "" ]; then
   exit 1
 fi
 
+generate_password() {
+  echo "`openssl rand -base64 16 | tr -dc a-zA-Z0-9 | tr 'AEIOU' 'aeiou' | tr '0-4' '.' | tr '5-9' '-'`"
+}
+
 LABEL=$1
 DISTRIBUTION="Ubuntu 16.04 LTS"
 STACKSCRIPT_NAME="hbj_initial_setup"
 
 STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*/ {print $2}'`
-ROOT_PASSWORD=`openssl rand -base64 32`
-USER_PASSWORD=`openssl rand -base64 16`
+ROOT_PASSWORD=`generate_password`
+USER_PASSWORD=`generate_password`
 JSON=`jq -c "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" udf.json`
 
 echo running with json: $JSON
