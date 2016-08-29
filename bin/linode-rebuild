@@ -17,9 +17,14 @@ IP_ADDRESS=`linode linode show robert-vpn | grep ips: | awk '/\s*/ {print $2}'`
 STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*/ {print $2}'`
 ROOT_PASSWORD=`generate_password`
 USER_PASSWORD=`generate_password`
-JSON=`jq -c "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" udf.json`
+JSON=`jq "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" udf.json`
+JSON_MIN=`echo $JSON | jq -c .`
 
-echo "running on $LABEL ($IP_ADDRESS) with json: $JSON"
+cat <<EOF
+running on $LABEL ($IP_ADDRESS) with this json:
+$JSON"
+
+EOF
 
 if [ -z "$DRY_RUN" ]; then
   linode rebuild \
@@ -27,11 +32,11 @@ if [ -z "$DRY_RUN" ]; then
     --distribution "$DISTRIBUTION" \
     --password "$ROOT_PASSWORD" \
     --stackscript "$STACKSCRIPT_ID" \
-    --stackscriptjson $JSON
+    --stackscriptjson $JSON_MIN
 
   if [ ! -z "$IP_ADDRESS" ]; then
-    KNOWN_HOSTS=`grep -v $IP_ADDRESS .ssh/known_hosts`
-    echo $KNOWN_HOSTS > .ssh/known_hosts
+    KNOWN_HOSTS=`grep -v $IP_ADDRESS ~/.ssh/known_hosts`
+    echo $KNOWN_HOSTS > ~/.ssh/known_hosts
   fi
 fi
 
