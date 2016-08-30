@@ -1,27 +1,49 @@
 #!/bin/bash
+#<UDF name="linode_hostname" label="Hostname" default="" description="hostname for this server" />
 #<UDF name="username" label="main user login" default="fooser" description="a non-root (but sudoing) user for the server" />
 #<UDF name="password" label="main user password" default="" description="a temporary password to be reset on first login" />
 #<UDF name="github_user" label="GitHub user whose keys will be installed" default="" description="optional GitHub user for authorized_keys" />
 #<UDF name="timezone" label="Timezone of the server" default="" description="optional timezone for the server" />
 #<UDF name="gist_id" label="Gist token" default="" description="optional GitHub gist (run as a shell script)" />
 
+log() {
+  echo "$LINODE_HOSTNAME - `date +'%Y/%m/%d %H:%M:%S.%N'` :: $1" >> ~/StackScript.log
+}
+
 initial_server_setup() {
-  LOG=~/StackScript.log
-  log() {
-    echo "`date +'%Y/%m/%d %H:%M:%S.%N'` :: $1" >> $LOG
-  }
   log "starting stackscript"
 
-  apt-get update
-  apt-get install -y curl wget git tree tmux
+  cat <<EOF > ./rerun-StackScript
+#!/bin/bash
 
+# This script should allow for easier troubleshooting; just source this file before re-running
+# the ~root/StackScript after a failed deploy.
+
+LINODE_HOSTNAME=$LINODE_HOSTNAME
+USERNAME=$USERNAME
+GITHUB_USER=$GITHUB_USER
+TIMEZONE=$TIMEZONE
+GIST_ID=$GIST_ID
+
+source ./StackScript
+EOF
+  chmod 755 ./rerun-StackScript
+
+  # First, a few useful packages
+  apt-get update
   for cmd in curl wget git tree tmux; do
+    apt-get install -y $cmd
     log "$cmd path: `which $cmd`"
   done
 
   USER_HOME=/home/$USERNAME
   log "USER_HOME: $USER_HOME"
 
+
+  # Set the hostname
+  hostname $LINODE_HOSTNAME
+  echo $LINODE_HOSTNAME > /etc/hostname
+  sed -i "s/127.0.1.1.*/127.0.1.1 $LINODE_HOSTNAME/" /etc/hosts
 
   # Add the main user
   useradd -m -s /bin/bash $USERNAME
@@ -50,33 +72,32 @@ EOF
   fi
 
   chown -R $USERNAME:$USERNAME $USER_HOME/.ssh
+  log "ssh directory: `ls -al $USER_HOME/.ssh`"
 
 
-  # disable ssh as root
-
-
-  # disable password authentication
-
-
+  # Configure sshd
+  sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+  sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+  log "sshd config: `grep 'PermitRootLogin \(no\|yes\)' /etc/ssh/sshd_config`"
+  log "sshd config: `grep 'PasswordAuthentication  \(no\|yes\)' /etc/ssh/sshd_config`"
   systemctl reload sshd
 
 
   # Uncomplicated Firewall
   ufw allow OpenSSH
   ufw --force enable
-  log "ufw status: `ufw status`"
+  log "ufw `ufw status`"
 
   # Setup timezone
   log "desired timezone: $TIMEZONE"
   if [ ! -z "$TIMEZONE" ]; then
-    echo $TIMEZONE > /etc/timezone
-    dpkg-reconfigure -f noninteractive tzdata
+    timedatectl set-timezone $TIMEZONE
     log "/etc/timezone: `cat /etc/timezone`"
   fi
   apt-get install -y ntp
 
 
-  # Run Gist
+  # Run gist
   log "gist to run: $GIST_ID"
   if [ ! -z "$GIST_ID" ]; then
     GIST_URL="https://gist.githubusercontent.com/$GITHUB_USER/$GIST_ID/raw"
