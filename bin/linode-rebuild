@@ -10,6 +10,7 @@ generate_password() {
 }
 
 LABEL=$1
+LINODE_HOSTNAME=$LABEL
 DISTRIBUTION="Ubuntu 16.04 LTS"
 STACKSCRIPT_NAME="hbj_initial_setup"
 
@@ -18,6 +19,7 @@ STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*
 ROOT_PASSWORD=`generate_password`
 USER_PASSWORD=`generate_password`
 JSON=`jq "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" udf.json`
+JSON=`echo $JSON | jq "setpath([\"LINODE_HOSTNAME\"]; \"$LINODE_HOSTNAME\")"`
 JSON_MIN=`echo $JSON | jq -c .`
 
 cat <<EOF
