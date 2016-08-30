@@ -1,5 +1,5 @@
 #!/bin/bash
-#<UDF name="linode_hostname" label="Hostname" default="" description="hostname for this server" />
+#<UDF name="server_hostname" label="Hostname" default="" description="hostname for this server" />
 #<UDF name="username" label="main user login" default="fooser" description="a non-root (but sudoing) user for the server" />
 #<UDF name="password" label="main user password" default="" description="a temporary password to be reset on first login" />
 #<UDF name="github_user" label="GitHub user whose keys will be installed" default="" description="optional GitHub user for authorized_keys" />
@@ -7,7 +7,7 @@
 #<UDF name="gist_id" label="Gist token" default="" description="optional GitHub gist (run as a shell script)" />
 
 log() {
-  echo "$LINODE_HOSTNAME - `date +'%Y/%m/%d %H:%M:%S.%N'` :: $1" >> ~/StackScript.log
+  echo "$SERVER_HOSTNAME - `date +'%Y/%m/%d %H:%M:%S.%N'` :: $1" >> ~/StackScript.log
 }
 
 initial_server_setup() {
@@ -19,7 +19,7 @@ initial_server_setup() {
 # This script should allow for easier troubleshooting; just source this file before re-running
 # the ~root/StackScript after a failed deploy.
 
-LINODE_HOSTNAME=$LINODE_HOSTNAME
+SERVER_HOSTNAME=$SERVER_HOSTNAME
 USERNAME=$USERNAME
 GITHUB_USER=$GITHUB_USER
 TIMEZONE=$TIMEZONE
@@ -41,9 +41,9 @@ EOF
 
 
   # Set the hostname
-  hostname $LINODE_HOSTNAME
-  echo $LINODE_HOSTNAME > /etc/hostname
-  sed -i "s/127.0.1.1.*/127.0.1.1 $LINODE_HOSTNAME/" /etc/hosts
+  hostname $SERVER_HOSTNAME
+  echo $SERVER_HOSTNAME > /etc/hostname
+  sed -i "s/127.0.1.1.*/127.0.1.1 $SERVER_HOSTNAME/" /etc/hosts
 
   # Add the main user
   useradd -m -s /bin/bash $USERNAME
