@@ -2,8 +2,9 @@
 
 LABEL=hbj_initial_setup
 DISTRIBUTION="Ubuntu 16.04 LTS"
-CODE_FILE=./lib/initial_server_setup.sh
+CODE_FILE=./server-scripts/initial_server_setup.sh
 DESCRIPTION="Initial setup (as per http://goo.gl/0GLSrd)"
+REVISION_NOTE="Initial revision"
 
 linode stackscript create \
   --label $LABEL \
@@ -11,4 +12,4 @@ linode stackscript create \
   --codefile "$CODE_FILE" \
   --ispublic false \
   --description "$DESCRIPTION" \
-  --revnote "Initial revision"
+  --revnote "$REVISION_NOTE"
