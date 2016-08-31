@@ -13,11 +13,11 @@ log() {
 initial_server_setup() {
   log "starting stackscript"
 
-  cat <<EOF > ./rerun-StackScript
+  cat <<EOF > ~/rerun-StackScript
 #!/bin/bash
 
-# This script should allow for easier troubleshooting; just source this file before re-running
-# the ~root/StackScript after a failed deploy.
+# This script should allow for easier troubleshooting after a failed deploy;
+# it re-sets all the UDF parameters before re-running ~root/StackScript.
 
 SERVER_HOSTNAME=$SERVER_HOSTNAME
 USERNAME=$USERNAME
