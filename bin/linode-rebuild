@@ -13,12 +13,21 @@ LABEL=$1
 SERVER_HOSTNAME=$LABEL
 DISTRIBUTION="Ubuntu 16.04 LTS"
 STACKSCRIPT_NAME="hbj_initial_setup"
+UDF_JSON=./config/udf.json
+
+if [ ! -f "$UDF_JSON" ]; then
+  cat <<EOF
+You need to create a json file at $UDF_JSON
+You can begin by making a copy of config/udf.example.json
+EOF
+  exit 1
+fi
 
 IP_ADDRESS=`linode linode show robert-vpn | grep ips: | awk '/\s*/ {print $2}'`
 STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*/ {print $2}'`
 ROOT_PASSWORD=`generate_password`
 USER_PASSWORD=`generate_password`
-JSON=`jq "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" udf.json`
+JSON=`jq "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" $UDF_JSON`
 JSON=`echo $JSON | jq "setpath([\"SERVER_HOSTNAME\"]; \"$SERVER_HOSTNAME\")"`
 JSON_MIN=`echo $JSON | jq -c .`
 
