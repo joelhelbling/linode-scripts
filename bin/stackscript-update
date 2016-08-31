@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LABEL=hbj_initial_setup
+LABEL=linode_initial_setup
 DISTRIBUTION="Ubuntu 16.04 LTS"
 CODE_FILE=./server-scripts/initial_server_setup.sh
 DESCRIPTION="Initial setup (as per http://goo.gl/0GLSrd)"

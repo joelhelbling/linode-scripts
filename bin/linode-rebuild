@@ -12,7 +12,7 @@ generate_password() {
 LABEL=$1
 SERVER_HOSTNAME=$LABEL
 DISTRIBUTION="Ubuntu 16.04 LTS"
-STACKSCRIPT_NAME="hbj_initial_setup"
+STACKSCRIPT_NAME="linode_initial_setup"
 UDF_JSON=./config/udf.json
 
 if [ ! -f "$UDF_JSON" ]; then
