@@ -1,3 +1,9 @@
 #!/bin/bash
 
-linode create
+echo "Creating new linode..."
+sleep 3
+cat <<EOF
+
+
+Aw, who am I kidding?  This script isn't even implemented yet.
+EOF
