@@ -23,7 +23,7 @@ EOF
   exit 1
 fi
 
-IP_ADDRESS=`linode linode show robert-vpn | grep ips: | awk '/\s*/ {print $2}'`
+IP_ADDRESS=`linode linode show $SERVER_HOSTNAME | grep ips: | awk '/\s*/ {print $2}'`
 STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*/ {print $2}'`
 ROOT_PASSWORD=`generate_password`
 USER_PASSWORD=`generate_password`

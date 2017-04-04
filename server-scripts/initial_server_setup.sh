@@ -27,13 +27,14 @@ GIST_ID=$GIST_ID
 
 source ./StackScript
 EOF
+
   chmod 755 ./rerun-StackScript
 
   # First, a few useful packages
   apt-get update
-  for cmd in curl wget git tree tmux; do
-    apt-get install -y $cmd
-    log "$cmd path: `which $cmd`"
+  for package in curl wget git tree tmux; do
+    apt-get install -y $package
+    log "$package path: `which $package`"
   done
 
   USER_HOME=/home/$USERNAME
@@ -87,6 +88,7 @@ EOF
   ufw allow OpenSSH
   ufw --force enable
   log "ufw `ufw status`"
+
 
   # Setup timezone
   log "desired timezone: $TIMEZONE"
