@@ -52,6 +52,12 @@ if [ -z "$DRY_RUN" ]; then
 fi
 
 cat <<EOF
+------------------------------
 Root password: $ROOT_PASSWORD
 User password: $USER_PASSWORD
+------------------------------
 EOF
+
+RESULT_JSON=`echo $JSON | jq "setpath([\"ROOT_PASSWORD\"]; \"$ROOT_PASSWORD\")" $UDF_JSON`
+echo $RESULT_JSON > /keybase/private/$USERNAME/$LABEL.json
+
