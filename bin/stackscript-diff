@@ -1,0 +1,16 @@
+#!/bin/bash
+
+LABEL=linode_initial_setup
+
+PUBLISHED=`linode stackscript source linode_initial_setup`
+SOURCE=`cat ./server-scripts/initial_server_setup.sh`
+
+DIFF=`diff <(echo "$SOURCE") <(echo "$PUBLISHED")`
+
+if [ -z "$DIFF" ]; then
+  echo "Stackscript $LABEL is up to date."
+  exit 0
+else
+  echo "$DIFF"
+  exit 1
+fi
