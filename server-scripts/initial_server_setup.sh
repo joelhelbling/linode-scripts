@@ -62,8 +62,10 @@ EOF
   mkdir $USER_HOME/.ssh
   chmod 700 $USER_HOME/.ssh
 
-  ssh-keygen -t rsa -f $USER_HOME/.ssh/id_rsa -q -P ""
-  chmod 600 $USER_HOME/.ssh/id_rsa
+  if [ ! -f "$USER_HOME/.ssh/id_rsa" ]; then
+    ssh-keygen -t rsa -f $USER_HOME/.ssh/id_rsa -q -P ""
+    chmod 600 $USER_HOME/.ssh/id_rsa
+  fi
   log "ssh public key: `cat $USER_HOME/.ssh/id_rsa.pub`"
 
   log "GitHub user: $GITHUB_USER"
