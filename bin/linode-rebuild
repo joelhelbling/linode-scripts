@@ -49,7 +49,7 @@ if [ -z "$DRY_RUN" ]; then
 
   if [ ! -z "$IP_ADDRESS" ]; then
     KNOWN_HOSTS=`grep -v $IP_ADDRESS ~/.ssh/known_hosts`
-    echo $KNOWN_HOSTS > ~/.ssh/known_hosts
+    echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
   fi
 fi
 
