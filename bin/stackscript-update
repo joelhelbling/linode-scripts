@@ -2,7 +2,7 @@
 
 LABEL=linode_initial_setup
 DISTRIBUTION="Ubuntu 16.04 LTS"
-CODE_FILE=./server-scripts/initial_server_setup.sh
+CODE_FILE=./stackscripts/$LABEL.sh
 DESCRIPTION="Initial setup (as per http://goo.gl/0GLSrd)"
 REVISION_NOTE="Revised and uploaded"
 
