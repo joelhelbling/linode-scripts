@@ -2,6 +2,7 @@ require 'thor'
 require 'json'
 require 'diffy'
 require 'term/ansicolor'
+require 'legitable'
 require_relative 'lin_utils'
 
 class Stackscript < Thor
@@ -18,9 +19,17 @@ class Stackscript < Thor
     if options[:raw]
       puts json
     else
-      JSON.parse(run(command)).keys.each do |script_name|
-        puts script_name
+      table = Legitable::Table.new(delimiter: '  ')
+      scripts = JSON.parse(json).values.sort{|x,y| x['revdt'] <=> y['revdt']}.reverse
+      scripts.each do |script|
+        table << {
+          label: script['label'],
+          updated: script['revdt'],
+          deployments: "#{script['deploymentsactive']} / #{script['deploymentstotal']}",
+          note: script['revnote']
+        }
       end
+      puts table.to_s
     end
   end
 
