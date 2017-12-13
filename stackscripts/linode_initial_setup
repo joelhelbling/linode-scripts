@@ -13,6 +13,7 @@ log() {
 initial_server_setup() {
   log "starting stackscript"
 
+  # Setup a rerun script
   cat <<EOF > ~/rerun-StackScript
 #!/bin/bash
 
@@ -30,7 +31,7 @@ EOF
 
   chmod 755 ./rerun-StackScript
 
-  # First, a few useful packages
+  # Install a few useful packages
   apt-get update
   for package in curl wget git tree tmux; do
     apt-get install -y $package
@@ -111,3 +112,4 @@ EOF
 }
 
 initial_server_setup
+

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 LABEL=linode_initial_setup
-CODE_FILE=./stackscripts/$LABEL.sh
+CODE_FILE=./stackscripts/$LABEL
 
-PUBLISHED=`linode stackscript source linode_initial_setup`
+PUBLISHED=`linode stackscript source $LABEL`
 SOURCE=`cat $CODE_FILE`
 
 DIFF=`diff <(echo "$SOURCE") <(echo "$PUBLISHED")`
