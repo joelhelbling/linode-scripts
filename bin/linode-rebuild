@@ -12,7 +12,7 @@ generate_password() {
 LABEL=$1
 SERVER_HOSTNAME=$LABEL
 DISTRIBUTION="Ubuntu 16.04 LTS"
-STACKSCRIPT_NAME="linode_initial_setup"
+STACKSCRIPT_NAME="initial_setup_docker"
 UDF_JSON=./config/udf.json
 
 if [ ! -f "$UDF_JSON" ]; then
@@ -25,6 +25,7 @@ fi
 
 IP_ADDRESS=`linode linode show $SERVER_HOSTNAME | grep ips: | awk '/\s*/ {print $2}'`
 STACKSCRIPT_ID=`linode stackscript show $STACKSCRIPT_NAME | grep id: | awk '/\s*/ {print $2}'`
+echo "Using stackscript: $STACKSCRIPT_NAME ($STACKSCRIPT_ID)"
 ROOT_PASSWORD=`generate_password`
 USER_PASSWORD=`generate_password`
 #JSON=`jq "setpath([\"PASSWORD\"]; \"$USER_PASSWORD\")" $UDF_JSON`
@@ -61,6 +62,8 @@ User password: $USER_PASSWORD
 EOF
 
 RESULT_JSON=`echo $JSON | jq "setpath([\"ROOT_PASSWORD\"]; \"$ROOT_PASSWORD\")"`
+RESULT_FILE=/keybase/private/$USER/$LABEL.json
 if [ -d "/keybase/private/$USER" ]; then
-  echo $RESULT_JSON > /keybase/private/$USER/$LABEL.json
+  echo $RESULT_JSON > $RESULT_FILE
+  echo "Deploy parameters (including passwords) written to $RESULT_FILE"
 fi
