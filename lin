@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative 'lib/lin'
+require_relative 'lib/api/utils'
+require_relative 'lib/cli/lin'
 
-Lin.start(ARGV)
+Cli::Lin.start(ARGV)
 
