@@ -1,6 +1,8 @@
 require 'pry'
 require 'thor'
 
+require_relative 'formattable'
+
 require_relative 'server'
 require_relative 'stackscript'
 require_relative 'distribution'
