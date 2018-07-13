@@ -14,6 +14,5 @@ module Api
     def read_local(label)
       File.read "./stackscripts/#{label}"
     end
-
   end
 end
