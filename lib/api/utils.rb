@@ -15,16 +15,5 @@ module Api
       File.read "./stackscripts/#{label}"
     end
 
-    def distribution_id_for(label)
-      distribution_for(label).distributionid
-    end
-
-    def distribution_for(label)
-      distributions.find { |distribution| distribution.label == label }
-    end
-
-    def distributions
-      @distributions ||= api.avail.distributions
-    end
   end
 end

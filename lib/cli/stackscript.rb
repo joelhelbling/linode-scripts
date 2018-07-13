@@ -38,7 +38,7 @@ module Cli
       api.stackscript.create(
         Label: label,
         Description: options[:description],
-        DistributionIDList: distribution_id_for(options[:distribution]),
+        DistributionIDList: Api::Distribution.id_from(options[:distribution]),
         isPublic: false,
         rev_note: options[:comment],
         script: script
@@ -79,7 +79,7 @@ module Cli
         StackScriptID: id_for(label),
         Label: label,
         Description: options[:description],
-        DistributionIDList: distribution_id_for(options[:distribution]),
+        DistributionIDList: Api::Distribution.id_from(options[:distribution]),
         isPublic: false,
         rev_note: options[:comment],
         script: script
